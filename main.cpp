@@ -196,15 +196,15 @@ int main(){
     cout << "5° - O cachorro e a raposa não podem ficar juntos e sozinhos porque o cachorro irá atacar a raposa." << endl;
     cout << "6° - As outras combinações de animais não apresentam o problema de um atacar o outro." << endl;
     cout << "" << endl;
-    
-   while(situacaoJogador(margem1,margem2)){
-       
     vizualizaMargens();
+
+   while(situacaoJogador(margem1,margem2)){
+
     cout << "";
     cout << "Digite o Numero para Mover: " << endl;
     cin >> opcao;
-
     travessia(margem1,margem2, opcao);
+    vizualizaMargens();
 
    }
 
