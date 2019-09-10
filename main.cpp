@@ -28,8 +28,8 @@ int margem2[3] = {};
 /* Boolean para verificar se existe mais de um animal na margem */
 bool maisDeUmAnimalNaMargem(int m[]){
 	int animais = 0;
-	for (int numero : m[]) {
-		if (numero > 0) {
+	for (int i = 0; i < 3; i++) {
+		if (m[i] > 0) {
 			animais++;
 		}
 	}
@@ -54,8 +54,8 @@ bool haConflitos(int m[]) {
 /* Calcula a soma dos animais da margem escolhida 
 int calculaMargem(int m[]){
     int soma = 0;
-    for (int animal : m){
-        soma += animal;
+    for (int i = 0; i < 3; i++){
+        soma += m[i];
     }
     return soma;
 }
@@ -63,8 +63,8 @@ int calculaMargem(int m[]){
 
 /* Verifica se certo animal existe em determinada margem */
 bool verificaMargem(int m[], int animal){
-    for (int i : m[]){
-        if (i == animal){
+    for (int i = 0; i < 3; i++){
+        if (m[i] == animal){
             return true;
         }
     }
@@ -72,8 +72,8 @@ bool verificaMargem(int m[], int animal){
 }
 /*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
 bool isFull(int m[]) {
-	for (int posicao : m[]) {
-		if (posicao == 0) {
+	for (int i = 0; i < 3; i++) {
+		if (m[i] == 0) {
 			return false;
 		}
 	}
