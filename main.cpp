@@ -243,20 +243,19 @@ int main() {
 		vizualizaMargens();
 
 		int op;
-		cout << "Desfazer jogada? (1/0)";
+		cout << "Desfazer jogada?";
+		cout << "Digite 1 se sua resposta for sim e 0 se for não" << endl;
 		cin >> op;
 		if (op) {
 			desfazerJogada(margem1, margem2, margem1copy, margem2copy, barqueiro);
 		}
 
-		if (situacaoJogador(margem1, margem2) == false and !isFull(margem2)) {
-			int solucionaJogo;
-
+		if (!situacaoJogador(margem1, margem2) and !isFull(margem2)) {
 			cout << "";
 			cout << "Deseja que o computador faça a solução do jogo? " << endl;
 			cout << "Digite 1 se sua resposta for sim e 0 se for não" << endl;
-			cin >> solucionaJogo;
-			if (solucionaJogo == 1) {
+			cin >> op;
+			if (op == 1) {
 				solucao();
 
 			}
