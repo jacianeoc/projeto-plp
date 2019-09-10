@@ -7,9 +7,9 @@ using namespace std;
 
 
 /* Animais da ao serem atravessados pelo rio */
-int galinha = 1;
-int raposa = 2;
-int cachorro = 3;
+int const galinha = 1;
+int const raposa = 2;
+int const cachorro = 3;
 
 /* Opcao selecionada*/
 int opcao;
@@ -27,35 +27,57 @@ int margem2[3] = {};
 
 /* Boolean para verificar se existe mais de um animal na margem */
 bool maisDeUmAnimalNaMargem(int m[]){
-    if (m[0] == 0 and m[2] == 0){
-        return false;
-    }
-    else if (m[1] == 0 and m[2] == 0){
-        return false;
-    }
-    else if (m[0] == 0 and m[1] == 0){
-        return false;
-    }
+	int animais = 0;
+	for (int numero : m) {
+		if (numero > 0) {
+			animais++;
+		}
+	}
+	if (animais <= 1) {
+		return false;
+	}
     return true;
 }
+/*verifica se ha confitos de animais na margem. Achei mais intuitivo que o calculaMargem, mas ai fica a criterios de vcs*/
+bool haConflitos(int m[]) {
+	if (m[0] != 0 and m[1] != 0 and m[2] == 0) {
+		return true;
+	}
+	else if (m[0] == 0 and m[1] != 0 and m[2] != 0) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
-/* Calcula a soma dos animais da margem escolhida */
+/* Calcula a soma dos animais da margem escolhida 
 int calculaMargem(int m[]){
     int soma = 0;
-    for (int i = 0; i < 3; i++){
-        soma += m[i];
+    for (int animal : m){
+        soma += animal;
     }
     return soma;
 }
+*/
 
 /* Verifica se certo animal existe em determinada margem */
 bool verificaMargem(int m[], int animal){
-    for (int i = 0; i < 3; i++){
-        if (m[i] == animal){
+    for (int i : m){
+        if (i == animal){
             return true;
         }
     }
     return false;
+}
+/*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
+bool isFull(int m[]) {
+	for (int posicao : m) {
+		if (posicao == 0) {
+			return false;
+		}
+	}
+	return true;
 }
 
 /* Metodo que realiza a travessia do animal no rio ou a travessia apenas do barqueiro */
@@ -95,17 +117,17 @@ void travessia(int m1[], int m2[], int animal){
 
 /* Confirma se o jogador perdeu ou ganhou o jogo */
 bool situacaoJogador(int m1[], int m2[]){
-    if (calculaMargem(m1)%2!= 0 and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
+    if (!haConflitos(m1) and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
     }
-    if (calculaMargem(m2)%2!=0 and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
+    if (!haConflitos(m2) and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
     }
-    if (calculaMargem(m2) == 6){
+    if (isFull(m2)){
         cout << " " << endl;
         cout << "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        " << endl;
         return false;
@@ -175,37 +197,70 @@ void vizualizaMargens(){
 }
 
 /* Metodo para que o jogo mostre a solucao */
-void solucao(){
-    //TODO
+void solucao() {
+	margem1[0] = galinha;
+	margem1[1] = raposa;
+	margem1[2] = cachorro;
+
+	margem2[3] = {};
+
+	int opcaoSolucao[7] = { raposa, 0, cachorro, raposa, galinha, 0, raposa };
+	for (int i = 0; i < 7; ++i) {
+		travessia(margem1, margem2, opcaoSolucao[i]);
+		vizualizaMargens();
+
+	}
+
 }
 
 /* Main onde será feito o menu interativo */
-int main(){
+int main() {
 
-    //Regras e Inicializacao
-    cout << "BEM VINDO A TRAVESSIA!" << endl;
-    cout << "" << endl;
-    cout << "Nesse jogo o barqueiro deve atravessar os 3 animais sem conflitos ;)" << endl;
-    
-    cout << "" << endl;
-    
-    cout << "As regras sao simples:" << endl;
-    cout << "1° - Existe espaço para apenas 2 no barco, apenas um animal pode ser atravessado por vez" << endl;
-    cout << "2° - O barqueiro pode atravessar o rio sozinho (ele esta sempre no barco)" << endl;
-    cout << "4° - Raposa e galinha não podem ficar juntas e sozinhas porque a raposa irá atacar a galinha." << endl;
-    cout << "5° - O cachorro e a raposa não podem ficar juntos e sozinhos porque o cachorro irá atacar a raposa." << endl;
-    cout << "6° - As outras combinações de animais não apresentam o problema de um atacar o outro." << endl;
-    cout << "" << endl;
-    vizualizaMargens();
+	//Regras e Inicializacao
+	cout << "BEM VINDO A TRAVESSIA!" << endl;
+	cout << "" << endl;
+	cout << "Nesse jogo o barqueiro deve atravessar os 3 animais sem conflitos ;)" << endl;
 
-   while(situacaoJogador(margem1,margem2)){
+	cout << "" << endl;
 
-    cout << "";
-    cout << "Digite o Numero para Mover: " << endl;
-    cin >> opcao;
-    travessia(margem1,margem2, opcao);
-    vizualizaMargens();
+	cout << "As regras sao simples:" << endl;
+	cout << "1° - Existe espaço para apenas 2 no barco, apenas um animal pode ser atravessado por vez" << endl;
+	cout << "2° - O barqueiro pode atravessar o rio sozinho (ele esta sempre no barco)" << endl;
+	cout << "4° - Raposa e galinha não podem ficar juntas e sozinhas porque a raposa irá atacar a galinha." << endl;
+	cout << "5° - O cachorro e a raposa não podem ficar juntos e sozinhos porque o cachorro irá atacar a raposa."
+		<< endl;
+	cout << "6° - As outras combinações de animais não apresentam o problema de um atacar o outro." << endl;
+	cout << "" << endl;
+	vizualizaMargens();
 
-   }
+	while (situacaoJogador(margem1, margem2)) {
+
+		cout << "";
+		cout << "Digite o Numero para Mover: " << endl;
+		cin >> opcao;
+		copyJogada(margem1, margem2, margem1copy, margem2copy);
+		travessia(margem1, margem2, opcao);
+		vizualizaMargens();
+
+		int op;
+		cout << "Desfazer jogada? (1/0)";
+		cin >> op;
+		if (op) {
+			desfazerJogada(margem1, margem2, margem1copy, margem2copy, barqueiro);
+		}
+
+		if (situacaoJogador(margem1, margem2) == false and !isFull(margem2)) {
+			int solucionaJogo;
+
+			cout << "";
+			cout << "Deseja que o computador faça a solução do jogo? " << endl;
+			cout << "Digite 1 se sua resposta for sim e 0 se for não" << endl;
+			cin >> solucionaJogo;
+			if (solucionaJogo == 1) {
+				solucao();
+
+			}
+		}
+	}
 
 }
