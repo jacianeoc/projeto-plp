@@ -83,10 +83,10 @@ bool isFull(int m[]) {
 /* Metodo que realiza a travessia do animal no rio ou a travessia apenas do barqueiro */
 void travessia(int m1[], int m2[], int animal){
     if(barqueiro == true and animal != 0){
-        /*Atributos para desfazerJogada
-        
-        margem1copy = m1;
-        margem2copy = m2;*/
+        for (int i = 0; i < 3; i++){
+            margem1copy[i] = m1[i];
+            margem2copy[i] = m2[i];
+        }
         if (verificaMargem(m1, animal)){
         m1[animal-1] = 0;
         m2[animal-1] = animal;
@@ -118,14 +118,7 @@ void travessia(int m1[], int m2[], int animal){
         barqueiro = true;
     }
 }
-/*Não estou seguro se funciona assim
 
-void desfazerTravessia(){
-
-    m1 = margem1copy;
-    m2 = margem2copy;
-
-}*/
 
 /* Confirma se o jogador perdeu ou ganhou o jogo */
 bool situacaoJogador(int m1[], int m2[]){
@@ -147,19 +140,13 @@ bool situacaoJogador(int m1[], int m2[]){
     return true;
 }
 
-/* A cada jogada fazer um copy */
-void copyJogada(int m1[], int m2[], int m1copy[], int m2copy[]){
-    for (int i = 0; i < 3; i++){
-        m1copy[i] = m1[i];
-        m2copy[i] = m2[i];
-    }
-}
+
 
 /* Desfazer jogada a partir do copy */
-void desfazerJogada(int m1[], int m2[], int m1copy[], int m2copy[], bool barco){
+void desfazerJogada(int m1[], int m2[], bool barco){
     for (int i = 0; i < 3; i++){
-        m1[i] = m1copy[i];
-        m2[i] = m2copy[i]; 
+        m1[i] = margem1copy[i];
+        m2[i] = margem2copy[i]; 
     }
 
     if (barco == false){
