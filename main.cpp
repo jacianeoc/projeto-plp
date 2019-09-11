@@ -184,7 +184,6 @@ void desfazerJogada(int margem1[], int margem2[], int margem1copy[], int margem2
     }
 
 
-
     if (barqueiro == false){
         barqueiro = true;
     }
@@ -195,10 +194,25 @@ void desfazerJogada(int margem1[], int margem2[], int margem1copy[], int margem2
     vizualizaMargens();
 }
 
-/* Metodo para que o jogo mostre a solucao */
-void solucao(){
-    //TODO
+void solucao() {
+    margem1[0] = galinha;
+    margem1[1] = raposa;
+    margem1[2] = cachorro;
+
+    margem2[3] = {};
+
+    if (barqueiro == false){
+        barqueiro = true;
+    }
+
+    int opcaoSolucao[7] = {2,0,3,2,1,0,2};
+    for (int i = 0; i < 7; ++i) {
+        travessia(margem1, margem2, opcaoSolucao[i]);
+        vizualizaMargens();
+
+    }
 }
+
 
 /* Main onde será feito o menu interativo */
 int main(){
@@ -234,6 +248,7 @@ int main(){
     if (op == 's') {
         desfazerJogada(margem1, margem2, margem1copy, margem2copy);
     }
+    solucao();
     // se na der certo coloca o array temp
     copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
    }
