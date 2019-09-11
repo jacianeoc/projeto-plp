@@ -67,7 +67,7 @@ bool haConflitos(int m[]) {
 }
 /*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
 bool ganhou() {
-      if(m2[0]!=0 and m2[1]!=0 and m2[2]!=0){
+      if(margem2[0]!=0 and margem2[1]!=0 and margem2[2]!=0){
 	return true;
       }
 	return false;
@@ -136,12 +136,12 @@ void travessia(int m1[], int m2[], int animal){
 
 /* Confirma se o jogador perdeu ou ganhou o jogo */
 bool situacaoJogador(int m1[], int m2[]){
-    if (!haConflitos() and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
+    if (!haConflitos(m1) and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
     }
-    if (!haConflitos() and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
+    if (!haConflitos(m1) and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
