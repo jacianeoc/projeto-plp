@@ -66,8 +66,8 @@ bool haConflitos(int m[]) {
 	}
 }
 /*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
-bool ganhou(int m[]) {
-      if(m[0]!=0 and m[1]!=0 and m[2]!=0){
+bool ganhou() {
+      if(m2[0]!=0 and m2[1]!=0 and m2[2]!=0){
 	return true;
       }
 	return false;
