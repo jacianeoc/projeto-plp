@@ -63,21 +63,17 @@ int calculaMargem(int m[]){
 
 /* Verifica se certo animal existe em determinada margem */
 bool verificaMargem(int m[], int animal){
-    for (int i = 0; i < 3; i++){
-        if (m[i] == animal){
-            return true;
-        }
+    if(m[animal-1]!=0){
+	return true;    
     }
-    return false;
+	return false;
 }
 /*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
 bool isFull(int m[]) {
-	for (int i = 0; i < 3; i++) {
-		if (m[i] == 0) {
-			return false;
-		}
-	}
+      if(m[0]!=0 and m[1]!=0 and m[2]!=0){
 	return true;
+      }
+	return false;
 }
 
 /* Metodo que realiza a travessia do animal no rio ou a travessia apenas do barqueiro */
@@ -152,7 +148,7 @@ void desfazerJogada(int m1[], int m2[], bool barco){
     if (barco == false){
         barqueiro = true;
     }
-    else if (barco == true){
+    else{
         barqueiro = false;
     }
 }
