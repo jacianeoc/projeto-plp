@@ -6,7 +6,7 @@ using namespace std;
 /** OPCAO DE DESFAZER JOGADA NAO IMPLEMETADA - USAR IDEA DE MANTER COPY DOS ARRAYS(SE QUISER) **/
 
 
-/* Animais da ao serem atravessados pelo rio */
+/* Animais a serem atravessados pelo rio */
 int const galinha = 1;
 int const raposa = 2;
 int const cachorro = 3;
@@ -38,7 +38,7 @@ bool maisDeUmAnimalNaMargem(int m[]){
 	}
     return true;
 }
-/*verifica se ha confitos de animais na margem. Achei mais intuitivo que o calculaMargem, mas ai fica a criterios de vcs*/
+/*verifica se ha conflitos de animais na margem. Achei mais intuitivo que o calculaMargem, mas ai fica a criterios de vcs*/
 bool haConflitos(int m[]) {
 	if (m[0] != 0 and m[1] != 0 and m[2] == 0) {
 		return true;
