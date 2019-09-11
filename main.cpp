@@ -15,7 +15,7 @@ int const cachorro = 3;
 int opcao;
 
 /* Copias para refazer jogada */
-int margem1copy[3] = {};
+int margem1copy[3] = {galinha,raposa,cachorro};
 int margem2copy[3] = {};
 
 /*True = Margem 1 and False = Margem 2*/ 
@@ -83,6 +83,10 @@ bool isFull(int m[]) {
 /* Metodo que realiza a travessia do animal no rio ou a travessia apenas do barqueiro */
 void travessia(int m1[], int m2[], int animal){
     if(barqueiro == true and animal != 0){
+        /*Atributos para desfazerJogada
+        
+        margem1copy = m1;
+        margem2copy = m2;*/
         if (verificaMargem(m1, animal)){
         m1[animal-1] = 0;
         m2[animal-1] = animal;
@@ -114,6 +118,14 @@ void travessia(int m1[], int m2[], int animal){
         barqueiro = true;
     }
 }
+/*Não estou seguro se funciona assim
+
+void desfazerTravessia(){
+
+    m1 = margem1copy;
+    m2 = margem2copy;
+
+}*/
 
 /* Confirma se o jogador perdeu ou ganhou o jogo */
 bool situacaoJogador(int m1[], int m2[]){
