@@ -15,8 +15,13 @@ int cachorro = 3;
 int opcao;
 
 /* Copias para refazer jogada */
-int margem1copy[3] = {};
+int margem1copy[3] = {galinha,raposa,cachorro};
 int margem2copy[3] = {};
+
+
+/* Copias temporarias da jogada */
+int temp1margem[3] = {};
+int temp2margem[3] = {};
 
 /*True = Margem 1 and False = Margem 2*/ 
 bool barqueiro = true;
@@ -57,7 +62,25 @@ bool verificaMargem(int m[], int animal){
     }
     return false;
 }
+/* colocando temporariamente o que teve na jogada em arrays terceiros */
+void tempMargem(int margem1[], int margem2[], int temp1margem[], int temp2margem[]){
 
+    for (int i = 0; i < 3; i++){
+        temp1margem[i] = margem1[i];
+        temp2margem[i] = margem2[i];
+    }
+
+}
+
+/* A cada jogada fazer um copy atraves dos array temporarios*/
+void copyJogada(int temp1margem[], int temp2margem[], int margem1copy[], int margem2copy[]){
+
+    for (int i = 0; i < 3; i++){
+        margem1copy[i] = temp1margem[i];
+        margem2copy[i] = temp2margem[i];
+    }
+
+}
 /* Metodo que realiza a travessia do animal no rio ou a travessia apenas do barqueiro */
 void travessia(int m1[], int m2[], int animal){
     if(barqueiro == true and animal != 0){
@@ -113,28 +136,6 @@ bool situacaoJogador(int m1[], int m2[]){
     return true;
 }
 
-/* A cada jogada fazer um copy */
-void copyJogada(int m1[], int m2[], int m1copy[], int m2copy[]){
-    for (int i = 0; i < 3; i++){
-        m1copy[i] = m1[i];
-        m2copy[i] = m2[i];
-    }
-}
-
-/* Desfazer jogada a partir do copy */
-void desfazerJogada(int m1[], int m2[], int m1copy[], int m2copy[], bool barco){
-    for (int i = 0; i < 3; i++){
-        m1[i] = m1copy[i];
-        m2[i] = m2copy[i]; 
-    }
-
-    if (barco == false){
-        barqueiro = true;
-    }
-    else if (barco == true){
-        barqueiro = false;
-    }
-}
 
 /* Representacao visual das margens do rio em cada situacao */
 void vizualizaMargens(){
@@ -174,6 +175,26 @@ void vizualizaMargens(){
     }
 }
 
+/* Desfazer jogada a partir do copy */
+void desfazerJogada(int margem1[], int margem2[], int margem1copy[], int margem2copy[]){
+
+    for (int i = 0; i < 3; i++){
+        margem1[i] = margem1copy[i];
+        margem2[i] = margem2copy[i];
+    }
+
+
+
+    if (barqueiro == false){
+        barqueiro = true;
+    }
+    else if (barqueiro == true){
+        barqueiro = false;
+    }
+    travessia(margem1, margem2, 0);
+    vizualizaMargens();
+}
+
 /* Metodo para que o jogo mostre a solucao */
 void solucao(){
     //TODO
@@ -205,7 +226,17 @@ int main(){
     cin >> opcao;
     travessia(margem1,margem2, opcao);
     vizualizaMargens();
+    tempMargem(margem1, margem2, temp1margem, temp2margem);
 
+    char op;
+    cout << "Desfazer jogada? [s/n]";
+    cin >> op;
+    if (op == 's') {
+        desfazerJogada(margem1, margem2, margem1copy, margem2copy);
+    }
+    // se na der certo coloca o array temp
+    copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
    }
+
 
 }
