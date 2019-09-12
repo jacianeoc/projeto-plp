@@ -26,7 +26,7 @@ O jogo tem por objetivo atravessar todos os passeiros de um lado do rio para o o
 
 ### Acompanhamento
 ### Professor(a)
-- Melina Mongiovi
+- Melina Mongioi
 
 ### Monitores
 - Talita
@@ -38,4 +38,5 @@ O jogo tem por objetivo atravessar todos os passeiros de um lado do rio para o o
 
 ---
 colococando apenas um link que achei legal e vejo depois
-[mudanca de cor] (https://www.codeproject.com/Articles/16431/Add-color-to-your-std-cout) :smile:
+[mudanca de cor](https://www.codeproject.com/Articles/16431/Add-color-to-your-std-cout) 
+:smile:
