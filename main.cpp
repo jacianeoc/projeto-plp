@@ -7,9 +7,9 @@ using namespace std;
 
 
 /* Animais da ao serem atravessados pelo rio */
-int const galinha = 1;
-int const raposa = 2;
-int const cachorro = 3;
+int galinha = 1;
+int raposa = 2;
+int cachorro = 3;
 
 /* Opcao selecionada*/
 int opcao;
@@ -32,53 +32,35 @@ int margem2[3] = {};
 
 /* Boolean para verificar se existe mais de um animal na margem */
 bool maisDeUmAnimalNaMargem(int m[]){
-    int animais = 0;
-	for (int i = 0; i < 3; i++) {
-		if (m[i] > 0) {
-			animais++;
-		}
-	}
-	if (animais <= 1) {
-		return false;
-	}
+    if (m[0] == 0 and m[2] == 0){
+        return false;
+    }
+    else if (m[1] == 0 and m[2] == 0){
+        return false;
+    }
+    else if (m[0] == 0 and m[1] == 0){
+        return false;
+    }
     return true;
 }
 
-/* Calcula a soma dos animais da margem escolhida
+/* Calcula a soma dos animais da margem escolhida */
 int calculaMargem(int m[]){
     int soma = 0;
     for (int i = 0; i < 3; i++){
         soma += m[i];
     }
     return soma;
-}*/
-
-/*verifica se ha conflitos de animais na margem. Achei mais intuitivo que o calculaMargem, mas ai fica a criterios de vcs*/
-bool haConflitos(int m[]) {
-	if (m[0] != 0 and m[1] != 0 and m[2] == 0) {
-		return true;
-	}
-	else if (m[0] == 0 and m[1] != 0 and m[2] != 0) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
-/*verifica se um array ta cheio (usado pra ver se a margem2 esta completa e o cara ganhou o jogo) */
-bool ganhou() {
-      if(margem2[0]!=0 and margem2[1]!=0 and margem2[2]!=0){
-	return true;
-      }
-	return false;
 }
 
 /* Verifica se certo animal existe em determinada margem */
 bool verificaMargem(int m[], int animal){
-    if(m[animal-1]!=0){
-	return true;    
+    for (int i = 0; i < 3; i++){
+        if (m[i] == animal){
+            return true;
+        }
     }
-	return false;
+    return false;
 }
 /* colocando temporariamente o que teve na jogada em arrays terceiros */
 void tempMargem(int margem1[], int margem2[], int temp1margem[], int temp2margem[]){
@@ -136,17 +118,17 @@ void travessia(int m1[], int m2[], int animal){
 
 /* Confirma se o jogador perdeu ou ganhou o jogo */
 bool situacaoJogador(int m1[], int m2[]){
-    if (!haConflitos(m1) and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
+    if (calculaMargem(m1)%2!= 0 and maisDeUmAnimalNaMargem(m1) and barqueiro == false){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
     }
-    if (!haConflitos(m1) and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
+    if (calculaMargem(m2)%2!=0 and maisDeUmAnimalNaMargem(m2) and barqueiro == true){
         cout << " " << endl;
         cout << "                                      Ｐｅｒｄｅｕ ！        " << endl;
         return false;
     }
-    if (ganhou()){
+    if (calculaMargem(m2) == 6){
         cout << " " << endl;
         cout << "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        " << endl;
         return false;
@@ -193,6 +175,7 @@ void vizualizaMargens(){
     }
 }
 
+
 /* Desfazer jogada a partir do copy */
 void desfazerJogada(int margem1[], int margem2[], int margem1copy[], int margem2copy[]){
 
@@ -201,18 +184,12 @@ void desfazerJogada(int margem1[], int margem2[], int margem1copy[], int margem2
         margem2[i] = margem2copy[i];
     }
 
-
-    if (barqueiro == false){
-        barqueiro = true;
-    }
-    else{
-        barqueiro = false;
-    }
     travessia(margem1, margem2, 0);
     vizualizaMargens();
 }
 
 void solucao() {
+
     margem1[0] = galinha;
     margem1[1] = raposa;
     margem1[2] = cachorro;
@@ -222,14 +199,25 @@ void solucao() {
     if (barqueiro == false){
         barqueiro = true;
     }
-
+    string passos[] = {"Passo 1- Atravessar a raposa para a outra margem (margem2)",
+                       "Passo 2- Fazer o barqueiro voltar para a margem de partida (margem1)",
+                       "Passo 3- Levar o cachoro para a margem2",
+                       "Passo 4- Trazer a raposa para a margem1, já que a raposa não pode ficar \n com cachorro sem a presença do barqueiro",
+                       "Passo 5- Levar a galinha para a margem2, para não ficar junto com a raposa",
+                       "Passo 6- O barqueiro volta para a margem1",
+                       "Passo 7- O barqueiro leva a raposa, fim !!!!!"};
     int opcaoSolucao[7] = {2,0,3,2,1,0,2};
     for (int i = 0; i < 7; ++i) {
         travessia(margem1, margem2, opcaoSolucao[i]);
         vizualizaMargens();
+        cout << "" << endl;
+        cout << "***************************" << endl;
+        cout << passos[i] << endl;
+        cout << "***************************" << endl;
 
     }
 }
+/*metodo responsavel por imprimir a solução somente se o jogador perder */
 
 
 /* Main onde será feito o menu interativo */
@@ -261,13 +249,22 @@ int main(){
     tempMargem(margem1, margem2, temp1margem, temp2margem);
 
     char op;
+    cout << "" << endl;
     cout << "Desfazer jogada? [s/n]";
     cin >> op;
     if (op == 's') {
         desfazerJogada(margem1, margem2, margem1copy, margem2copy);
     }
-    solucao();
-    // se na der certo coloca o array temp
+    if(situacaoJogador(margem1, margem2) == false){
+        char op2;
+        cout << "" << endl;
+        cout << "Voce perdeu o jogo, deseja que o computador faça a solução? [s/n]";
+        cin >> op2;
+        if (op2 == 's') {
+            solucao();
+        }
+    }
+
     copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
    }
 
