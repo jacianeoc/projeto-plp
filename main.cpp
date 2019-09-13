@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <vector>
 
@@ -7,9 +8,9 @@ using namespace std;
 
 
 /* Animais da ao serem atravessados pelo rio */
-int galinha = 1;
-int raposa = 2;
-int cachorro = 3;
+int const galinha = 1;
+int const raposa = 2;
+int const cachorro = 3;
 
 /* Opcao selecionada*/
 int opcao;
@@ -26,21 +27,27 @@ int temp2margem[3] = {};
 /*True = Margem 1 and False = Margem 2*/ 
 bool barqueiro = true;
 
+/* Vê se o jogador perdeu ou não(para perguntar se ele quer ver a solução)*/
+bool ganhou = false;
+
+/* True = o while do main funciona; False= não funciona*/
+bool jogando = true;
+
 /* Margens do Rio */
 int margem1[3] = {galinha,raposa,cachorro};
 int margem2[3] = {};
 
 /* Boolean para verificar se existe mais de um animal na margem */
 bool maisDeUmAnimalNaMargem(int m[]){
-    if (m[0] == 0 and m[2] == 0){
-        return false;
-    }
-    else if (m[1] == 0 and m[2] == 0){
-        return false;
-    }
-    else if (m[0] == 0 and m[1] == 0){
-        return false;
-    }
+    int animais = 0;
+    for(int i = 0; i < 3; i++){
+		if(m[i]>0){
+			animais++;
+		}
+	}
+	if(animais<=1){
+		return false;
+	}
     return true;
 }
 
@@ -55,12 +62,11 @@ int calculaMargem(int m[]){
 
 /* Verifica se certo animal existe em determinada margem */
 bool verificaMargem(int m[], int animal){
-    for (int i = 0; i < 3; i++){
-        if (m[i] == animal){
-            return true;
-        }
-    }
-    return false;
+    if(m[animal-1]!=0){
+		return true;
+	}else{
+		return false;
+	}
 }
 /* colocando temporariamente o que teve na jogada em arrays terceiros */
 void tempMargem(int margem1[], int margem2[], int temp1margem[], int temp2margem[]){
@@ -131,6 +137,7 @@ bool situacaoJogador(int m1[], int m2[]){
     if (calculaMargem(m2) == 6){
         cout << " " << endl;
         cout << "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        " << endl;
+        ganhou = true;
         return false;
     }
     return true;
@@ -238,8 +245,9 @@ int main(){
     cout << "6° - As outras combinações de animais não apresentam o problema de um atacar o outro." << endl;
     cout << "" << endl;
     vizualizaMargens();
+	
 
-   while(situacaoJogador(margem1,margem2)){
+   while(jogando){
 
     cout << "";
     cout << "Digite o Numero para Mover: " << endl;
@@ -250,23 +258,40 @@ int main(){
 
     char op;
     cout << "" << endl;
-    cout << "Desfazer jogada? [s/n]";
+    cout << "Desfazer jogada? [s/n]" << endl;
     cin >> op;
     if (op == 's') {
         desfazerJogada(margem1, margem2, margem1copy, margem2copy);
     }
     if(situacaoJogador(margem1, margem2) == false){
-        char op2;
+	char op2;
+	if(!ganhou){
+		cout << "" << endl;
+		cout << "Você perdeu o jogo, deseja que o computador faça a solução? [s/n]" << endl;
+		cin >> op2;
+		if (op2 == 's') {
+			solucao();
+		}
+	}
         cout << "" << endl;
-        cout << "Voce perdeu o jogo, deseja que o computador faça a solução? [s/n]";
+        cout << "Jogar novamente? [s/n]" << endl;
         cin >> op2;
-        if (op2 == 's') {
-            solucao();
-        }
-    }
+        if(op2 == 's'){
+	    jogando = true;
+	    ganhou = false;
+            barqueiro = true;
+	    margem1[0] = galinha;
+	    margem1[1] = raposa;
+	    margem1[2] = cachorro;
+            margem2[0] = 0;
+            margem2[1] = 0;
+            margem2[2] = 0;
+	    vizualizaMargens();
+	}else{ 
+	    jogando = false;
+	}
+   }
 
     copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
    }
-
-
 }
