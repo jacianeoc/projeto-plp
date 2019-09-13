@@ -258,7 +258,7 @@ int main(){
 
     char op;
     cout << "" << endl;
-    cout << "Desfazer jogada? [s/n]";
+    cout << "Desfazer jogada? [s/n]" << endl;
     cin >> op;
     if (op == 's') {
         desfazerJogada(margem1, margem2, margem1copy, margem2copy);
@@ -267,14 +267,14 @@ int main(){
 	char op2;
 	if(!ganhou){
 		cout << "" << endl;
-		cout << "Você perdeu o jogo, deseja que o computador faça a solução? [s/n]";
+		cout << "Você perdeu o jogo, deseja que o computador faça a solução? [s/n]" << endl;
 		cin >> op2;
 		if (op2 == 's') {
 			solucao();
 		}
 	}
         cout << "" << endl;
-        cout << "Jogar novamente? [s/n]";
+        cout << "Jogar novamente? [s/n]" << endl;
         cin >> op2;
         if(op2 == 's'){
 	    jogando = true;
