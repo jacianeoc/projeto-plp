@@ -151,10 +151,10 @@ void vizualizaMargens(){
     cout << "" << endl;
     
     if (barqueiro == true){
-        cout << " 0- Barqueiro -->		        ░🛶	 	        ░       " << endl;
+        cout << " 0- Barqueiro -->		        ░⛵	 	        ░       " << endl;
     }
     else{
-        cout << " 0- Barqueiro -->		        ░ 	 	     🛶 ░       " << endl;
+        cout << " 0- Barqueiro -->		        ░ 	 	     ⛵░       " << endl;
     }
 
     // Verifica lado galinha
