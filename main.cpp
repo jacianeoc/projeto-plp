@@ -276,20 +276,25 @@ int main(){
         cout << "" << endl;
         cout << "Jogar novamente? [s/n]" << endl;
         cin >> op2;
-        if(op2 == 's'){
-	    jogando = true;
-	    ganhou = false;
+       if(op2 == 's'){
+            jogando = true;
+            ganhou = false;
             barqueiro = true;
-	    margem1[0] = galinha;
-	    margem1[1] = raposa;
-	    margem1[2] = cachorro;
-            margem2[0] = 0;
-            margem2[1] = 0;
-            margem2[2] = 0;
-	    vizualizaMargens();
-	}else{ 
-	    jogando = false;
-	}
+            margem1[0] = galinha;
+            margem1[1] = raposa;
+            margem1[2] = cachorro;
+            temp1margem[0] = galinha;
+            temp1margem[1] = raposa;
+            temp1margem[2] = cachorro;
+            temp2margem[0] = 0;
+            temp2margem[1] = 0;
+            temp2margem[2] = 0;
+
+            copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
+            vizualizaMargens();
+	    }else{ 
+	        jogando = false;
+	    }
    }
 
     copyJogada(temp1margem, temp2margem, margem1copy, margem2copy);
