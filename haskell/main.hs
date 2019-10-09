@@ -11,31 +11,14 @@ barqueiro = 4
 data Margem = Quadruple Int Int Int Int deriving(show, eq)
 
 situacaoDoJogador :: Margem -> Margem -> Bool
-situacaoDoJogador (Quadruple 0 raposa cachorro _)  (Quadruple 0 raposa cachorro _) = False --perdeu
-situacaoDoJogador (Quadruple galinha raposa 0 _) (Quadruple galinha raposa 0 _) = False --perdeu
-situacaoDoJogador _ _= True --Ainda jogando 
+situacaoDoJogador m1 m2 =
+	| m1==(Quadruple 0 raposa cachorro 0) || m2 == (Quadruple 0 raposa cachorro 0) = False --perdeu
+	| m1==(Quadruple galinha raposa 0 0) || m2 == (Quadruple galinha raposa 0 0) = False --perdeu
+	| otherwise = True --Ainda jogando 
 
 ganhou :: Margem->Bool
 ganhou  (Quadruple galinha,raposa,cachorro) = True
 ganhou _ = False
-
--- Essa implementção aí não tá ideal pra função de iniciar, mas é um começo
-iniciar :: Margem -> Margem -> Bool-> Bool -> IO()
-iniciar _ _ False _ = putStrLn "                                      Ｐｅｒｄｅｕ ！        "
-iniciar _ _ _ True =  putStrLn "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        "
-iniciar m1 m2 situacao ganhou = do
-			putStrLn ""
-			putStrLn "Digite o Numero para Mover: "
-			opcao <-readLn::IO Int
-
-			let r = fazerJogada m1 m2 opcao
-			visualizaMargens (fst r)
-			if(m1==(fst r) and m2==(snd r)) then 
-				putStrLn ""
-				putStrLn "Animal selecionado nao se encontra nessa margem"
-			else putStrLn ""
-			
-			iniciar situacaoDoJogador (fst r) (snd r) ganhou (snd r)
 
 fazerJogada :: Margem -> Margem ->Int-> (Margem,Margem)
 fazerJogada (Quadruple a b c 4) (Quadruple e f g 0) opcao
@@ -55,15 +38,56 @@ visualizaMargens::Margem -> IO()
 visualizaMargens m1 = do
 	putStrLn ""
 	putStrLn "                                   Ｔｒａｖｅｓｓｉａ" 
-	if m1 == (Quadruple 1 _ _ _) then putStrLn " 1- Galinha "
+	if m1 == (Quadruple 1 _ _ _) then putStrLn " 1- Galinha   -->        🐥░                       ░       "
 	else putStrLn " 1- Galinha   -->        ░                       ░🐥       "
-	if m1 == (Quadruple _ 2 _ _) then putStrLn " 2- Raposa    -->		     🦊 ░                       ░       "
-	else putStrLn " 2- Raposa    -->		        ░                       ░🦊       "
-	if m1 == (Quadruple _ _ 3 _) then putStrLn " 3- Cachorro  -->		     🐶 ░                       ░       " 
-	else putStrLn " 3- Cachorro  -->		        ░                       ░🐶       "
-	if m1 == (Quadruple _ _ _ 4) then putStrLn " 4- Barqueiro -->		        ░⛵	 	        ░       "
-	else putStrLn " 4- Barqueiro -->		        ░ 	 	     ⛵░       " 
+	if m1 == (Quadruple _ 2 _ _) then putStrLn " 2- Raposa    -->       🦊 ░                       ░       "
+	else putStrLn " 2- Raposa    -->       ░                       ░🦊       "
+	if m1 == (Quadruple _ _ 3 _) then putStrLn " 3- Cachorro  -->       🐶 ░                       ░       " 
+	else putStrLn " 3- Cachorro  -->        ░                       ░🐶       "
+	if m1 == (Quadruple _ _ _ 4) then putStrLn " 4- Barqueiro -->          ░⛵                   ░       "
+	else putStrLn " 4- Barqueiro -->        ░                     ⛵░       " 
 	
+desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> Char -> (Margem,Margem)
+desfazerJogada a b 's'= a 
+desfazerJogada a b 'n'= b
+desfazerJogada _ _ _ = b
+
+-- Essa implementção aí não tá ideal pra função de iniciar, mas é um começo
+iniciar :: Margem -> Margem -> Bool-> Bool -> IO()
+iniciar _ _ False _ = putStrLn "                                      Ｐｅｒｄｅｕ ！        "
+iniciar _ _ _ True =  putStrLn "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        "
+iniciar m1 m2 situacao ganhou = do
+			putStrLn ""
+			putStrLn "Digite o Numero para Mover: "
+			opcao <-readLn::IO Int
+
+			let r = fazerJogada m1 m2 opcao
+			visualizaMargens (fst r)
+			if(m1==(fst r) and m2==(snd r)) then 
+				putStrLn ""
+				putStrLn "Animal selecionado nao se encontra nessa margem"
+			else putStrLn "" 
+				 putStrLn "Desfazer Jogada? [s/n]"
+				 opcao <-readlLn::IO Char
+				 let d = desfazerJogada (m1,m2) r opcao
+				 iniciar situacaoDoJogador (fst d) (snd d) ganhou (snd r)
+			
+			iniciar situacaoDoJogador (fst r) (snd r) ganhou (snd r)
+
+mostrarSolucao :: Char -> IO()
+mostrarSolucao 's' = do
+	putStrLn "                             S O L U Ç Ã O "
+	putStrLn ""
+	putStrLn "Passo 1- Atravessar a raposa para a outra margem (margem2)"
+	putStrLn "Passo 2- Fazer o barqueiro voltar para a margem de partida (margem1)"
+	putStrLn "Passo 3- Levar o cachoro para a margem2"
+	putStrLn "Passo 4- Trazer a raposa para a margem1, já que a raposa não pode ficar \n com cachorro sem a presença do barqueiro"
+	putStrLn "Passo 5- Levar a galinha para a margem2, para não ficar junto com a raposa"
+	putStrLn "Passo 6- O barqueiro volta para a margem1"
+	putStrLn "Passo 7- O barqueiro leva a raposa, fim !!!!!"
+
+mostrarSolucao _ = putStrLn ""
+
 main = do
 	putStrLn "BEM VINDO A TRAVESSIA!"
 	putStrLn ""
@@ -79,3 +103,6 @@ main = do
 	
 	iniciar (Quadruple 1 2 3 4) (Quadruple 0 0 0 0) (situacaoDoJogador (Quadruple 1 2 3 4)) (Quadruple 0 0 0 0)) (ganhou (Quadruple 0 0 0 0))
 	
+	putStrLn "Mostrar solução? [s/n]"
+	opcao <- readLn::IO Char
+	mostrarSolucao opcao
