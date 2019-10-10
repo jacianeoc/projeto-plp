@@ -24,15 +24,15 @@ fazerJogada :: Margem -> Margem ->Int-> (Margem,Margem)
 fazerJogada (Quadruple a b c 4) (Quadruple e f g 0) opcao
 	| opcao == 1 = ((Quadruple 0 b c 0 ), (Quadruple 1 f g 4))
 	| opcao == 2 = ((Quadruple a 0 c 0 ), (Quadruple e 2 g 4))
-	| opcao == 3 = ((Quadruple a b 3 0 ), (Quadruple e f 3 4))
+	| opcao == 3 = ((Quadruple a b 0 0 ), (Quadruple e f 3 4))
 	| opcao == 4 = ((Quadruple a b c 0 ), (Quadruple e f g 4))
-	| otherwise = ((Quadruple (a b c 4)),(Quadruple e f g h))
+	| otherwise = ((Quadruple a b c 4), (Quadruple e f g 0))
 fazerJogada (Quadruple a b c 0) (Quadruple e f g 4) opcao
 	| opcao == 1 = ((Quadruple 1 b c 4 ), (Quadruple 0 f g 0))
 	| opcao == 2 = ((Quadruple a 2 c 4 ), (Quadruple e 0 g 0))
 	| opcao == 3 = ((Quadruple a b 3 4 ), (Quadruple e f 0 0))
 	| opcao == 4 = ((Quadruple a b c 4 ), (Quadruple e f g 0))
-	| otherwise = ((Quadruple (a b c 0)),(Quadruple e f g 4))
+	| otherwise = ((Quadruple a b c 0), (Quadruple e f g 4))
 
 visualizaMargens::Margem -> IO()
 visualizaMargens m1 = do
@@ -48,32 +48,11 @@ visualizaMargens m1 = do
 	else putStrLn " 4- Barqueiro -->        ░                     ⛵░       " 
 	
 desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> Char -> (Margem,Margem)
-desfazerJogada a b 's'= a 
-desfazerJogada a b 'n'= b
-desfazerJogada _ _ _ = b
-
--- Essa implementção aí não tá ideal pra função de iniciar, mas é um começo
-iniciar :: Margem -> Margem -> Bool-> Bool -> IO()
-iniciar _ _ False _ = putStrLn "                                      Ｐｅｒｄｅｕ ！        "
-iniciar _ _ _ True =  putStrLn "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        "
-iniciar m1 m2 situacao ganhou = do
-			putStrLn ""
-			putStrLn "Digite o Numero para Mover: "
-			opcao <-readLn::IO Int
-
-			let r = fazerJogada m1 m2 opcao
-			visualizaMargens (fst r)
-			if(m1==(fst r) and m2==(snd r)) then 
-				putStrLn ""
-				putStrLn "Animal selecionado nao se encontra nessa margem"
-			else putStrLn "" 
-				 putStrLn "Desfazer Jogada? [s/n]"
-				 opcao <-readlLn::IO Char
-				 let d = desfazerJogada (m1,m2) r opcao
-				 iniciar situacaoDoJogador (fst d) (snd d) ganhou (snd r)
-			
-			iniciar situacaoDoJogador (fst r) (snd r) ganhou (snd r)
-
+desfazerJogada a b opcao =
+	|opcao=='s' = a
+	|opcao=='n' = b
+	|otherwise = b
+	
 mostrarSolucao :: Char -> IO()
 mostrarSolucao 's' = do
 	putStrLn "                             S O L U Ç Ã O "
@@ -87,6 +66,37 @@ mostrarSolucao 's' = do
 	putStrLn "Passo 7- O barqueiro leva a raposa, fim !!!!!"
 
 mostrarSolucao _ = putStrLn ""
+
+--Função principal (funciona como while)
+iniciar :: Margem -> Margem -> Bool-> Bool -> IO()
+iniciar _ _ False _ = do
+	putStrLn "                                      Ｐｅｒｄｅｕ ！        "
+	putStrLn ""
+	putStrLn "Mostrar solução? [s/n]"
+	opcao <- getChar
+	mostrarSolucao opcao
+iniciar _ _ _ True =  putStrLn "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        "
+iniciar m1 m2 situacao ganhou = do
+	visualizaMargens m1
+	putStrLn ""
+	putStrLn "Digite o Numero para Mover: "
+	opcao <-readLn::IO Int
+
+	let r = fazerJogada m1 m2 opcao
+	visualizaMargens (fst r)
+	if (m1==(fst r) and m2==(snd r)) then 
+		putStrLn ""
+		putStrLn "Animal selecionado nao se encontra nessa margem"
+		iniciar (fst r) (snd r) (situacaoDoJogador (fst r) (snd r)) (ganhou (snd r))
+	else putStrLn "" 
+		putStrLn "Desfazer Jogada? [s/n] "
+		opcao <- getChar
+		let d = desfazerJogada (m1,m2) r opcao
+		iniciar (fst d) (snd d) (situacaoDoJogador (fst d) (snd d)) (ganhou (snd r))
+		
+	-- Essa chamada recursiva aqui em baixo acho que não precisava, 
+	-- mas deixei comentada por garantia. Colei ela no primeiro if
+      --iniciar (fst r) (snd r) (situacaoDoJogador (fst r) (snd r)) (ganhou (snd r))
 
 main = do
 	putStrLn "BEM VINDO A TRAVESSIA!"
@@ -102,7 +112,4 @@ main = do
 	putStrLn ""
 	
 	iniciar (Quadruple 1 2 3 4) (Quadruple 0 0 0 0) (situacaoDoJogador (Quadruple 1 2 3 4)) (Quadruple 0 0 0 0)) (ganhou (Quadruple 0 0 0 0))
-	
-	putStrLn "Mostrar solução? [s/n]"
-	opcao <- readLn::IO Char
-	mostrarSolucao opcao
+
