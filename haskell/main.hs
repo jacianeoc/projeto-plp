@@ -1,12 +1,3 @@
---definição das constantes
-galinha :: Int
-galinha = 1
-raposa :: Int
-raposa = 2
-cachorro ::Int
-cachorro = 3
-barqueiro :: Int
-barqueiro = 4
 --Cada margem é uma quadrupla (galinha,raposa,cachorro,barqueiro)
 data Margem = Quadruple Int Int Int Int deriving(Show,Eq)
 
@@ -18,9 +9,8 @@ situacaoDoJogador m1 m2
 	
 --Recebe a margem2 e verifica se ela tem todos os animais e o barqueiro
 ganhou :: Margem -> Bool
-ganhou m2
-	|m2 == (Quadruple galinha raposa cachorro barqueiro) = True
-	|otherwise = False
+ganhou (Quadruple 1 2 3 4) = True
+ganhou _ = False
 
 fazerJogada :: Margem -> Margem ->Int-> (Margem,Margem)
 fazerJogada (Quadruple a b c 4) (Quadruple e f g 0) opcao
@@ -53,14 +43,14 @@ visualizaMargens::Margem -> IO()
 visualizaMargens m1 = do
 	putStrLn ""
 	putStrLn "                                   Ｔｒａｖｅｓｓｉａ" 
-	if (first m1) == 1 then putStrLn " 1- Galinha ||                      ||       "
-	else putStrLn " 1-         ||                       ||Galinha       "
-	if (second m1) == 2 then putStrLn " 2- Raposa ||                      ||       "
-	else putStrLn " 2- ||                      ||Raposa       "
-	if (third m1) == 3 then putStrLn " 3- Cachorro ||                      ||       "
-	else putStrLn " 3-  ||                      ||Cachorro       "
-	if (fourth m1) == 4 then putStrLn " 4- Barqueiro ||                      ||       "
-	else putStrLn " 4-  ||                      ||Barqueiro       "
+	if (first m1) == 1 then putStrLn " 1- Galinha   -->        🐥░                       ░       "
+	else putStrLn " 1- Galinha   -->        ░                       ░🐥       "
+	if (second m1) == 2 then putStrLn " 2- Raposa    -->       🐺 ░                       ░       "
+	else putStrLn " 2- Raposa    -->       ░                       ░🐺       "
+	if (third m1) == 3 then putStrLn " 3- Cachorro  -->       🐶 ░                       ░       " 
+	else putStrLn " 3- Cachorro  -->        ░                       ░🐶       "
+	if (fourth m1) == 4 then putStrLn " 4- Barqueiro -->          ░⛵                    ░       "
+	else putStrLn " 4- Barqueiro -->        ░                      ⛵░       " 
 	
 desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> Char -> (Margem,Margem)
 desfazerJogada a b opcao 
@@ -101,13 +91,17 @@ iniciar m1 m2 situacao ganhou = do
 	if (m1==(fst r) && m2==(snd r)) then do
 		putStrLn ""
 		putStrLn "Animal selecionado nao se encontra nessa margem"
-		iniciar (fst r) (snd r) (situacaoDoJogador (fst r) (snd r)) (ganhou (snd r))
+		iniciar (fst r) (snd r) (situacaoDoJogador (fst r) (snd r)) False
 	else do putStrLn "" 
 		putStrLn "Desfazer Jogada? [s/n] "
 		opcao <- getChar
 		let d = desfazerJogada (m1,m2) r opcao
-		iniciar (fst d) (snd d) (situacaoDoJogador (fst d) (snd d)) (ganhou (snd r))
-		
+		let m = snd d
+		if m == (Quadruple 1 2 3 4) then 
+			iniciar (fst d) (snd d) (situacaoDoJogador (fst d) (snd d)) True
+			
+		else 
+			iniciar (fst d) (snd d) (situacaoDoJogador (fst d) (snd d)) False
 main = do
 	putStrLn "BEM VINDO A TRAVESSIA!"
 	putStrLn ""
