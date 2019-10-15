@@ -3,8 +3,8 @@ data Margem = Quadruple Int Int Int Int deriving(Show,Eq)
 
 situacaoDoJogador :: Margem -> Margem -> Bool
 situacaoDoJogador m1 m2 
-	|m1 == (Quadruple 0 raposa cachorro 0) || m2 == (Quadruple 0 raposa cachorro 0) = False --perdeu
-	|m1 == (Quadruple galinha raposa 0 0) || m2 == (Quadruple galinha raposa 0 0) = False --perdeu
+	|m1 == (Quadruple 0 2 3 0) || m2 == (Quadruple 0 2 3 0) = False --perdeu
+	|m1 == (Quadruple 1 2 0 0) || m2 == (Quadruple 1 2 0 0) = False --perdeu
 	|otherwise = True --Ainda jogando 
 	
 --Recebe a margem2 e verifica se ela tem todos os animais e o barqueiro
