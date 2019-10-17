@@ -5,7 +5,7 @@ situacaoDoJogador :: Margem -> Margem -> Bool
 situacaoDoJogador m1 m2 
 	|m1 == (Quadruple 0 2 3 0) || m2 == (Quadruple 0 2 3 0) = False --perdeu
 	|m1 == (Quadruple 1 2 0 0) || m2 == (Quadruple 1 2 0 0) = False --perdeu
-	|otherwise = True --Ainda jogando 
+	|otherwise = True
 	
 --Recebe a margem2 e verifica se ela tem todos os animais e o barqueiro
 ganhou :: Margem -> Bool
@@ -14,15 +14,15 @@ ganhou _ = False
 
 fazerJogada :: Margem -> Margem ->Int-> (Margem,Margem)
 fazerJogada (Quadruple a b c 4) (Quadruple e f g 0) opcao
-	|opcao == 1 = ((Quadruple 0 b c 0 ), (Quadruple 1 f g 4))
-	|opcao == 2 = ((Quadruple a 0 c 0 ), (Quadruple e 2 g 4))
-	|opcao == 3 = ((Quadruple a b 0 0 ), (Quadruple e f 3 4))
+	|opcao == 1 && first(Quadruple a b c 4) == 1 = ((Quadruple 0 b c 0 ), (Quadruple 1 f g 4))
+	|opcao == 2 && second(Quadruple a b c 4) == 2 = ((Quadruple a 0 c 0 ), (Quadruple e 2 g 4))
+	|opcao == 3 && third(Quadruple a b c 4) == 3 = ((Quadruple a b 0 0 ), (Quadruple e f 3 4))
 	|opcao == 4 = ((Quadruple a b c 0 ), (Quadruple e f g 4))
 	|otherwise = ((Quadruple a b c 4), (Quadruple e f g 0))
 fazerJogada (Quadruple a b c 0) (Quadruple e f g 4) opcao
-	|opcao == 1 = ((Quadruple 1 b c 4 ), (Quadruple 0 f g 0))
-	|opcao == 2 = ((Quadruple a 2 c 4 ), (Quadruple e 0 g 0))
-	|opcao == 3 = ((Quadruple a b 3 4 ), (Quadruple e f 0 0))
+	|opcao == 1 && first(Quadruple e f g 4) == 1= ((Quadruple 1 b c 4 ), (Quadruple 0 f g 0))
+	|opcao == 2 && second(Quadruple e f g 4) == 2 = ((Quadruple a 2 c 4 ), (Quadruple e 0 g 0))
+	|opcao == 3 && third(Quadruple e f g 4) == 3 = ((Quadruple a b 3 4 ), (Quadruple e f 0 0))
 	|opcao == 4 = ((Quadruple a b c 4 ), (Quadruple e f g 0))
 	|otherwise = ((Quadruple a b c 0), (Quadruple e f g 4))
 
@@ -43,14 +43,14 @@ visualizaMargens::Margem -> IO()
 visualizaMargens m1 = do
 	putStrLn ""
 	putStrLn "                                   Ｔｒａｖｅｓｓｉａ" 
-	if (first m1) == 1 then putStrLn " 1- Galinha   -->        🐥░                       ░       "
-	else putStrLn " 1- Galinha   -->        ░                       ░🐥       "
-	if (second m1) == 2 then putStrLn " 2- Raposa    -->       🐺 ░                       ░       "
-	else putStrLn " 2- Raposa    -->       ░                       ░🐺       "
-	if (third m1) == 3 then putStrLn " 3- Cachorro  -->       🐶 ░                       ░       " 
-	else putStrLn " 3- Cachorro  -->        ░                       ░🐶       "
-	if (fourth m1) == 4 then putStrLn " 4- Barqueiro -->          ░⛵                    ░       "
-	else putStrLn " 4- Barqueiro -->        ░                      ⛵░       " 
+	if (first m1) == 1 then putStrLn " 1- Galinha   -->       🐥░                       ░       "
+	else putStrLn " 1- Galinha   -->         ░                       ░🐥       "
+	if (second m1) == 2 then putStrLn " 2- Raposa   -->       🐺 ░                       ░       "
+	else putStrLn " 2- Raposa    -->         ░                       ░🐺       "
+	if (third m1) == 3 then putStrLn " 3- Cachorro   -->     🐶 ░                       ░       " 
+	else putStrLn " 3- Cachorro  -->         ░                       ░🐶       "
+	if (fourth m1) == 4 then putStrLn " 4- Barqueiro   -->       ░⛵                     ░       "
+	else putStrLn " 4- Barqueiro -->         ░                     ⛵░       " 
 	
 desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> Char -> (Margem,Margem)
 desfazerJogada a b opcao 
