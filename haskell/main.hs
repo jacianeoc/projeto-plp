@@ -38,7 +38,7 @@ visualizaMargens::Margem -> IO()
 visualizaMargens m1 = do
 	putStrLn ""
 	putStrLn "                                   Ｔｒａｖｅｓｓｉａ" 
-	if (first m1) == 1 then putStrLn " 1- Galinha   -->       🐥░                       ░       "
+	if (first m1) == 1 then putStrLn " 1- Galinha   -->      🐥 ░                       ░       "
 	else putStrLn " 1- Galinha   -->         ░                       ░🐥       "
 	if (second m1) == 2 then putStrLn " 2- Raposa   -->       🐺 ░                       ░       "
 	else putStrLn " 2- Raposa    -->         ░                       ░🐺       "
