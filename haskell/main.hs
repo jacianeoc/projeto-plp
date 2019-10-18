@@ -6,11 +6,6 @@ situacaoDoJogador m1 m2
 	|m1 == (Quadruple 0 2 3 0) || m2 == (Quadruple 0 2 3 0) = False --perdeu
 	|m1 == (Quadruple 1 2 0 0) || m2 == (Quadruple 1 2 0 0) = False --perdeu
 	|otherwise = True
-	
---Recebe a margem2 e verifica se ela tem todos os animais e o barqueiro
-ganhou :: Margem -> Bool
-ganhou (Quadruple 1 2 3 4) = True
-ganhou _ = False
 
 fazerJogada :: Margem -> Margem ->Int-> (Margem,Margem)
 fazerJogada (Quadruple a b c 4) (Quadruple e f g 0) opcao
@@ -52,13 +47,13 @@ visualizaMargens m1 = do
 	if (fourth m1) == 4 then putStrLn " 4- Barqueiro   -->       ░⛵                     ░       "
 	else putStrLn " 4- Barqueiro -->         ░                     ⛵░       " 
 	
-desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> Char -> (Margem,Margem)
-desfazerJogada a b opcao 
-	|opcao=='s' = a
+desfazerJogada :: (Margem,Margem) -> (Margem,Margem) -> String -> (Margem,Margem)
+desfazerJogada a b op 
+	|op == "s" = a
 	|otherwise = b
 	
-mostrarSolucao :: Char -> IO()
-mostrarSolucao 's' = do
+mostrarSolucao :: String -> IO()
+mostrarSolucao "s" = do
 	putStrLn "                             S O L U Ç Ã O "
 	putStrLn ""
 	putStrLn "Passo 1- Atravessar a raposa para a outra margem (margem2)"
@@ -77,7 +72,7 @@ iniciar _ _ False _ = do
 	putStrLn "                                      Ｐｅｒｄｅｕ ！        "
 	putStrLn ""
 	putStrLn "Mostrar solução? [s/n]"
-	opcao <- getChar
+	opcao <- getLine
 	mostrarSolucao opcao
 iniciar _ _ _ True =  do putStrLn "                             Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        "
 iniciar m1 m2 situacao ganhou = do
@@ -94,7 +89,7 @@ iniciar m1 m2 situacao ganhou = do
 		iniciar (fst r) (snd r) (situacaoDoJogador (fst r) (snd r)) False
 	else do putStrLn "" 
 		putStrLn "Desfazer Jogada? [s/n] "
-		opcao <- getChar
+		opcao <- getLine
 		let d = desfazerJogada (m1,m2) r opcao
 		let m = snd d
 		if m == (Quadruple 1 2 3 4) then 
@@ -115,4 +110,4 @@ main = do
 	putStrLn "5° - As outras combinações de animais não apresentam o problema de um atacar o outro."
 	putStrLn ""
 	
-	iniciar (Quadruple 1 2 3 4) (Quadruple 0 0 0 0) (situacaoDoJogador (Quadruple 1 2 3 4) (Quadruple 0 0 0 0)) (ganhou (Quadruple 0 0 0 0))
+	iniciar (Quadruple 1 2 3 4) (Quadruple 0 0 0 0) (situacaoDoJogador (Quadruple 1 2 3 4) (Quadruple 0 0 0 0)) (False) --Bool identifica se o jogador ganhou ou nao)
