@@ -8,7 +8,7 @@ visualizaMargens(Margem1):-
 imprimeGalinha(Margem1,ImprimeG):-
     Margem1 \= (0,B,C,D), 
     ImprimeG = ' 1- Galinha   -->		     🐥 ░                       ░      ';
-    ImprimeG = ' 1- Galinha   -->		        ░                       ░🐥        '.
+    ImprimeG = ' 1- Galinha   -->		        ░                       ░ 🐥       '.
 
 imprimeRaposa(Margem1,ImprimeR):-
     Margem1 \= (A,0,C,D), 
@@ -51,7 +51,7 @@ fazerJogada(2,(A,0,C,0), (E,2,G,4),(A,2,C,4),(E,0,G,0)).
 fazerJogada(3,(A,B,0,0), (E,F,3,4),(A,B,3,4),(E,F,0,0)).
 fazerJogada(4,(A,B,C,0), (E,F,G,4),(A,B,C,4),(E,F,G,0)).
 
-
+%casos em que o animal não se encontar na margem
 fazerJogada(_,Margem1,Margem2,_,_):-
     writeln('Animal selecionado nao se encontra nessa margem'),
     iniciar(Margem1,Margem2).
@@ -69,9 +69,7 @@ fazerJogada(3,(A,B,0,4),Margem2,_,_):-
     writeln('Animal selecionado nao se encontra nessa margem'),
     iniciar((A,B,0,4),Margem2).
 
-%barqueiro na margem2 -- animal nao esta na margem
-%fazerJogada... (acho q deu pra sacar como q faz o resto)
-
+%quando o jogador perder a partida, irá perguntar se o usuario deseja saber a solução do puzzle
 gameOver:- writeln('                                      Ｐｅｒｄｅｕ ！        '),
            nl,
            writeln('Mostrar solução? [s/n]'),
@@ -95,7 +93,7 @@ solucao(Op):-
                writeln('Passo 4- Trazer a raposa para a margem1, já que a raposa não pode ficar \n com cachorro sem a presença do barqueiro'),
                writeln('Passo 5- Levar a galinha para a margem2, para não ficar junto com a raposa'),
                writeln('Passo 6- O barqueiro volta para a margem1'),
-               writeln('Passo 7- O barqueiro leva a raposa, fim !!!!!'),halt();
+               writeln('Passo 7- O barqueiro leva a raposa, fim !!!!!'),nl, halt();
                halt().
 
 iniciar(Margem1, Margem2):-
