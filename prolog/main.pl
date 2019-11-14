@@ -1,30 +1,30 @@
 :- initialization main.
+
 %responsavel para vizualizar as margens do rio
 visualizaMargens(Margem1):-
     nl, write( "                                            Ｔｒａｖｅｓｓｉａ"), nl,
-    imprimeBarco(Margem1,ImprimeB),imprimeGalinha(Margem1,ImprimeG),imprimeRaposa(Margem1,ImprimeR),imprimeCachorro(Margem1,ImprimeC),
-    writeln(ImprimeG), writeln(ImprimeR), writeln(ImprimeC), writeln(ImprimeB).
+    imprimeGalinha(Margem1),imprimeRaposa(Margem1),imprimeCachorro(Margem1),imprimeBarco(Margem1).
 
 %imprime a posicao em que o animal se encontra
-imprimeGalinha(Margem1,ImprimeG):-
-    Margem1 \= (0,B,C,D), 
-    ImprimeG = ' 1- Galinha   -->		     🐥 ░                       ░      ';
-    ImprimeG = ' 1- Galinha   -->		        ░                       ░ 🐥       '.
+imprimeGalinha(Margem1):-
+    Margem1 \= (0,_,_,_), 
+    writeln(' 1- Galinha   -->		     🐥 ░                       ░      ');
+    writeln(' 1- Galinha   -->		        ░                       ░ 🐥       ').
 
-imprimeRaposa(Margem1,ImprimeR):-
-    Margem1 \= (A,0,C,D), 
-    ImprimeR = ' 2- Raposa   -->		     🦊 ░                       ░       ';
-    ImprimeR = ' 2- Raposa   -->		        ░                       ░ 🦊        '.
+imprimeRaposa(Margem1):-
+    Margem1 \= (_,0,_,_), 
+    writeln(' 2- Raposa   -->		     🦊 ░                       ░       ');
+    writeln(' 2- Raposa   -->		        ░                       ░ 🦊        ').
 
-imprimeCachorro(Margem1,ImprimeC):-
-    Margem1 \= (A,B,0,D), 
-    ImprimeC = ' 3- Cachorro   -->		     🐶 ░                       ░       ';
-    ImprimeC = ' 3- Cachorro   -->		        ░                       ░ 🐶        '.
+imprimeCachorro(Margem1):-
+    Margem1 \= (_,_,0,_), 
+    writeln(' 3- Cachorro   -->		     🐶 ░                       ░       ');
+    writeln(' 3- Cachorro   -->		        ░                       ░ 🐶        ').
 
-imprimeBarco(Margem1,ImprimeB):-
-    Margem1 \= (A,B,C,0), 
-    ImprimeB = ' 4- Barco   -->		                ░⛵                     ░      ';
-    ImprimeB = ' 4- Barco   -->		                ░                    ⛵ ░        '.
+imprimeBarco(Margem1):-
+    Margem1 \= (_,_,_,0), 
+    writeln(' 4- Barco   -->		                ░⛵                     ░      ');
+    writeln(' 4- Barco   -->		                ░                    ⛵ ░        ').
 
 %desfaz a jogada usando a margem que foi usada inicialmente e a jogada do usuario 
 %retorna uma margem final 
@@ -71,23 +71,22 @@ fazerJogada(3,(A,B,0,4),Margem2,_,_):-
     writeln('Animal selecionado nao se encontra nessa margem'),
     iniciar((A,B,0,4),Margem2).
 
-%quando o jogador perder a partida, irá perguntar se o usuario deseja saber a solução do puzzle
+% Quando a posicao dos animais equivaler a perda do jogo leva a esta clausula
 gameOver:- writeln('                                      Ｐｅｒｄｅｕ ！        '),
            nl,
            writeln('Mostrar solução? [s/n]'),
            read(Op),
            solucao(Op).
 
-%se a posicao de todos os animais estiverem na margem dois ira mandar para o usuario que ele ganhou a partida
+% Se a posicao de todos os animais estiverem na margem dois ira mandar para o usuario que ele ganhou a partida
 iniciar((0,0,0,0), (1,2,3,4)):- writeln('                                       Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        '), halt().
-%possibilidades em que o usuario pode perder, assim chama outro metodo (nao eh o nome certo em prolog mas esqueci o certo)
-% para ver se o usuario deseja saber a resposta 
+% Clausulas de iniciar que levam a clausula de perda do jogo, verificada pela posicao dos animais na tupla
 iniciar((1,2,0,0), (0,0,3,4)):- gameOver.
 iniciar((0,2,3,0), (1,0,0,4)):- gameOver.
 iniciar((0,0,3,4), (1,2,0,0)):- gameOver.
 iniciar((1,0,0,4), (0,2,3,0)):- gameOver.
 
-%mostra a solucao passo-a-passo do puzzle :) 
+% Mostra a solucao passo-a-passo do puzzle :) 
 solucao(Op):- 
                Op == 's',
                writeln('                             S O L U Ç Ã O '),
@@ -100,7 +99,8 @@ solucao(Op):-
                writeln('Passo 6- O barqueiro volta para a margem1'),
                writeln('Passo 7- O barqueiro leva a raposa, fim !!!!!'),nl, halt();
                halt().
-%inicializa o jogo de forma recurssiva
+
+% Clausula iniciar que define recursao por seus casos
 iniciar(Margem1, Margem2):-
                         visualizaMargens(Margem1),
                         writeln('Digite o Numero para Mover: '),
@@ -112,7 +112,7 @@ iniciar(Margem1, Margem2):-
                         NewMargem2 = Margem2Final,
                         iniciar(NewMargem1,NewMargem2).
 
-% o main do puzzle :) 
+% O main do puzzle, o loop ocorre nas entradas de casos das clausulas de iniciar.
 main:-
     nl, writeln('BEM VINDO A TRAVESSIA!'),nl,
     writeln('Nesse jogo o barqueiro deve atravessar os 3 animais sem conflitos ;)'), nl,
