@@ -91,8 +91,17 @@ solucao(Op):-
                writeln('Passo 5- Levar a galinha para a margem2, para não ficar junto com a raposa'),
                writeln('Passo 6- O barqueiro volta para a margem1'),
                writeln('Passo 7- O barqueiro leva a raposa, fim !!!!!'),nl, halt();
+
                halt().
 
+
+% Se a posicao de todos os animais estiverem na margem dois ira mandar para o usuario que ele ganhou a partida
+iniciar((0,0,0,0), (1,2,3,4)):- writeln('                                       Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        '), halt().
+% Clausulas de iniciar que levam a clausula de perda do jogo, verificada pela posicao dos animais na tupla
+iniciar((1,2,0,0), (0,0,3,4)):- gameOver.
+iniciar((0,2,3,0), (1,0,0,4)):- gameOver.
+iniciar((0,0,3,4), (1,2,0,0)):- gameOver.
+iniciar((1,0,0,4), (0,2,3,0)):- gameOver.
 % Clausula iniciar que define recursao por seus casos
 iniciar(Margem1, Margem2):-
                         visualizaMargens(Margem1),
@@ -105,13 +114,7 @@ iniciar(Margem1, Margem2):-
                         NewMargem2 = Margem2Final,
                         iniciar(NewMargem1,NewMargem2).
 
-% Se a posicao de todos os animais estiverem na margem dois ira mandar para o usuario que ele ganhou a partida
-iniciar((0,0,0,0), (1,2,3,4)):- writeln('                                       Ｇａｎｈｏｕ！ Ｐａｒａｂｅｎｓ ！        '), halt().
-% Clausulas de iniciar que levam a clausula de perda do jogo, verificada pela posicao dos animais na tupla
-iniciar((1,2,0,0), (0,0,3,4)):- gameOver.
-iniciar((0,2,3,0), (1,0,0,4)):- gameOver.
-iniciar((0,0,3,4), (1,2,0,0)):- gameOver.
-iniciar((1,0,0,4), (0,2,3,0)):- gameOver.
+
 
 % O main do puzzle, o loop ocorre nas entradas de casos das clausulas de iniciar.
 main:-
